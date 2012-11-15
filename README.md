@@ -125,6 +125,7 @@ When the application is working as intended, add the following to &lt;Modules&gt
 	<Name>geoipDenyCountries</Name>
 	<Value></Value>
 </Property>
+```
 
 ### Adding exceptions on the fly
 
