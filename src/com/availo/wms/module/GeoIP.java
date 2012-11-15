@@ -68,7 +68,7 @@ public class GeoIP extends ModuleBase {
 	private String applicationPath;
 	
 	/**
-	 * Where to find the GeoIP.dat file. Can be overriden in Application.conf
+	 * Where to find the GeoIP.dat file. Can be overridden in Application.conf
 	 */
 	private String geoipDatabasePath = "/usr/local/share/GeoIP/GeoIP.dat";
 	
@@ -92,34 +92,39 @@ public class GeoIP extends ModuleBase {
 		
 		this.countryCodeAccessList = new HashMap<String, Boolean>();
 
-		if (allowCountries != null) {
-			if (allowCountries.indexOf("|") >= 0) {
-				String[] allowCountriesArray = allowCountries.split(Pattern.quote("|"));
-				for (String country : allowCountriesArray) {
-					if (country != null) {
-						this.countryCodeAccessList.put(country, true);
-					}
-				}
-			}
-			else {
-				this.countryCodeAccessList.put(allowCountries, true);
-			}
-		}
-
+		// Add all the denyCountries first, to make allowCountries override them if any conflict arises.
 		if (denyCountries != null) {
 			if (denyCountries.indexOf("|") >= 0) {
 				String[] denyCountriesArray = denyCountries.split(Pattern.quote("|"));
 				for (String country : denyCountriesArray) {
 					if (country != null) {
 						this.countryCodeAccessList.put(country, false);
+						WMSLoggerFactory.getLogger(GeoIP.class).debug("Adding '" + country + "' to countryCodeAccessList with value 'false'.", "GeoIP", "comment");
 					}
 				}
 			}
 			else {
 				this.countryCodeAccessList.put(denyCountries, false);
+				WMSLoggerFactory.getLogger(GeoIP.class).debug("Adding '" + denyCountries + "' to countryCodeAccessList with value 'false'.", "GeoIP", "comment");
 			}
 		}
 		
+		// allowCountries should override any conflicts. (Won't help if "NO" is used one place, and "Norway" the other.)
+		if (allowCountries != null) {
+			if (allowCountries.indexOf("|") >= 0) {
+				String[] allowCountriesArray = allowCountries.split(Pattern.quote("|"));
+				for (String country : allowCountriesArray) {
+					if (country != null) {
+						this.countryCodeAccessList.put(country, true);
+						WMSLoggerFactory.getLogger(GeoIP.class).debug("Adding '" + country + "' to countryCodeAccessList with value 'true'.", "GeoIP", "comment");
+					}
+				}
+			}
+			else {
+				this.countryCodeAccessList.put(allowCountries, true);
+				WMSLoggerFactory.getLogger(GeoIP.class).debug("Adding '" + allowCountries + "' to countryCodeAccessList with value 'true'.", "GeoIP", "comment");
+			}
+		}
 		
 		File appConfigFile = new File(appInstance.getApplication().getConfigPath());
 		this.applicationPath = appConfigFile.getParent();

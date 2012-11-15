@@ -7,29 +7,33 @@ Simplistic GeoIP module for Wowza Media Server
 A GeoIP module that supports denying access to certain countries, or blocking
 all countries except a predefined set of countries.
 
-Supports exception files per application that will be re-read on-the-fly
+Supports exception files per application that will be re-read on the fly
 after changes have been made.
 
-The module has been designed with ease-of-use as the main concern, and
+The module has been designed with ease of use as the main concern, and
 only requires one configuration property per application, after loading the
 module in the relevant Application.xml files.
 
 ## Credits
 
-The module was written by me way back in 2008, as an RTMP-only geoip-blocker,
-and updated more recently with HTTP and RTSP support.
+The module was written back in 2008, as an RTMP-only geoip-blocker, and
+updated more recently with HTTP and RTSP support.
 
 Support for CIDR-based exceptions was added by incorporating two functions
 posted online by Charles Johnson (http://www.technojeeves.com/).
 
-The GeoIP library used in this module is created by MaxMind, and is LGPL-licensed:
-http://dev.maxmind.com/geoip/downloadable#Java-8
+The GeoIP library used in this module is created by MaxMind, and is
+LGPL-licensed: http://dev.maxmind.com/geoip/downloadable#Java-8
 
 ## Known problems / limitations
 
 The module does unfortunately *not* support IPv6 yet.
 
-The "geoipDenyCountries" option is not tested as much as "allowGeoipCountries".
+If you mix short country codes and full country names and add (for example)
+"NO" to geoipDenyCountries and "Norway" to geoipAllowCountries, you will
+confuse the geoip module, and get unpredictable results.
+Using "Norway" in both properties will make geoipAllowCountries take
+precedence over geoipDenyCountries, to err on the side of caution.
 
 ## Prerequisites
 
