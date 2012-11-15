@@ -69,9 +69,9 @@ When the application is working as intended, add the following to &lt;Modules&gt
 
 ```xml
 <Module>
-	<Name>ModuleLoadBalancerRedirector</Name>
-	<Description>ModuleLoadBalancerRedirector</Description>
-	<Class>com.availo.wms.plugin.vhostloadbalancer.ModuleLoadBalancerRedirector</Class>
+	<Name>GeoIP</Name>
+	<Description>Availo GeoIP Module</Description>
+	<Class>com.availo.wms.module.GeoIP</Class>
 </Module>
 ```
 
@@ -128,9 +128,9 @@ When the application is working as intended, add the following to &lt;Modules&gt
 
 ### Adding exceptions on the fly
 
-All the configuration properties requires a restart of the application
+All the configuration properties require a restart of the application
 after changing the values. This only happens if the application is inactive
-for a certain period, a restart of the vhost or a restart of Wowza.
+for a certain period, or by restarting the vhost or the Wowza server itself.
 
 A slightly less effective option is available for situations where restarting
 the application is impossible, by using an exceptions file.
@@ -141,13 +141,18 @@ application's config directory, alongside Application.xml.
 The file accepts countries, IP addresses and CIDR.
 Each exception should be placed on a separate line, like this:
 
-``
+```bash
+cat > /usr/local/WowzaMediaServer/conf/geoip/geoip.exceptions << EOF
 127.0.0.1
 192.168.0.0/24
 Norway
 10.4.20.0/23
 UK
-``
+EOF
+```
+
+This would create exceptions for 127.0.0.1, 192.168.0.0 to 192.168.0.255,
+Norway, 10.4.20.0 to 10.4.21.255 and finally United Kingdom.
 
 ### Debugging
 
